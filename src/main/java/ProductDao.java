@@ -9,11 +9,8 @@ import java.util.Scanner;
 
 public class ProductDao {
 
-	public void saveProduct(Product product , Scanner ip) throws ClassNotFoundException, SQLException {
+	public void saveProduct(Product product , Scanner ip, Connection conn) throws ClassNotFoundException, SQLException {
 		
-		Class.forName("org.postgresql.Driver");
-		Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/eca_jdbc", "postgres", "root");
-
 		PreparedStatement pstm = conn.prepareStatement("Insert into product values(?,?,?,?)");
 
 		System.out.print("Enter Product Id : ");
@@ -38,11 +35,8 @@ public class ProductDao {
 
 	}
 
-	public void updateProduct(Product product , Scanner ip) throws ClassNotFoundException, SQLException {
+	public void updateProduct(Product product , Scanner ip,Connection conn) throws ClassNotFoundException, SQLException {
 
-		Class.forName("org.postgresql.Driver");
-		Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/eca_jdbc", "postgres", "root");
-		
 		System.out.println("1. Update Product Name");
 		System.out.println("2. Update Type Name");
 		System.out.println("3. Update Cost Name");
@@ -104,13 +98,10 @@ public class ProductDao {
 		
 	}
 
-	public Product findById(int productId,Scanner ip) throws ClassNotFoundException, SQLException {
-		
-		Class.forName("org.postgresql.Driver");
-		Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/eca_jdbc", "postgres", "root");
-		
-		PreparedStatement pstm = conn.prepareStatement("Select * from product where productId="+productId);
-//		pstm.setInt(1, productId);
+	public Product findById(int productId,Scanner ip,Connection conn) throws ClassNotFoundException, SQLException {
+				
+		PreparedStatement pstm = conn.prepareStatement("Select * from product where productId=?");
+		pstm.setInt(1, productId);
 		
 		ResultSet rs = pstm.executeQuery();
 		
@@ -123,10 +114,7 @@ public class ProductDao {
 		
 	}
 	
-	public List<Product> displayAll() throws ClassNotFoundException, SQLException {
-		
-		Class.forName("org.postgresql.Driver");
-		Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/eca_jdbc", "postgres", "root");
+	public List<Product> displayAll(Connection conn) throws ClassNotFoundException, SQLException {
 		
 		PreparedStatement pstm = conn.prepareStatement("Select * from product");
 		
@@ -142,10 +130,7 @@ public class ProductDao {
 		
 	}
 
-	public void deleteProduct(int productId) throws ClassNotFoundException, SQLException {
-
-		Class.forName("org.postgresql.Driver");
-		Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/eca_jdbc", "postgres", "root");
+	public void deleteProduct(int productId, Connection conn) throws ClassNotFoundException, SQLException {
 
 		PreparedStatement pstm = conn.prepareStatement("delete from product where productid = ?");
 		pstm.setInt(1, productId);
